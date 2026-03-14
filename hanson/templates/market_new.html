@@ -1,26 +1,23 @@
 {% extends "base_session.html" %}
 
-{% block title %}New market — Hanson{% endblock %}
+{% block title %}Новое пари — Рынок Предсказаний{% endblock %}
 
 {% block body %}
 <div class="main-content main-full">
-  <h1>Create a new market</h1>
+  <h1>Создать новое пари</h1>
+  <p>Пари — это вопрос с ответами «Да» и «Нет». Участники торгуют своими жетонами, выражая уверенность в исходе.</p>
   <form id="market-form" action="/market/new" method="post">
-      <label for="title">Title</label>
-      <input name="title" id="title" type="text" required class="span2">
+      <label for="title">Вопрос</label>
+      <input name="title" id="title" type="text" required class="span2"
+             placeholder="Например: Выйдет ли GPT-5 до конца 2025 года?">
 
-      <label for="description">Description</label>
-      <textarea name="description" id="description" required class="span2"></textarea>
+      <label for="description">Описание и критерии разрешения</label>
+      <textarea name="description" id="description" required class="span2"
+                placeholder="Опишите точные условия, при которых пари считается выигранным или проигранным."></textarea>
 
-      {% for i in range(0, 5) %}
+      <p class="hint">Исходы: <strong>Да</strong> (🟢) и <strong>Нет</strong> (🔴) — задаются автоматически.</p>
 
-      <label for="label{{i}}">Option {{i + 1}}</label>
-      <input name="label{{i}}" id="label{{i}}" {% if i < 2 %}required {% endif %}type="text">
-      <input name="color{{i}}" type="color" value="#ff0000">
-
-      {% endfor %}
-
-      <input type="submit" value="Create market" class="span2">
+      <input type="submit" value="Создать пари" class="span2">
   </form>
 </div>
 {% endblock %}

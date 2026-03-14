@@ -1,9 +1,12 @@
 {% extends "base_session.html" %}
 
-{% block title %}Hanson{% endblock %}
+{% block title %}Рынок Предсказаний{% endblock %}
 
 {% block body %}
 <div class="main-content main-full">
-  <h1>Hello {{name}}</h1>
+  <h1>Добро пожаловать, {{session_user.user.full_name}}!</h1>
+  <p>У вас <strong>{{session_user.points_balance.amount | int}} жетонов</strong>.</p>
+  <p><a href="/markets">Смотреть все пари →</a></p>
+  <p><a href="/market/new">Создать новое пари →</a></p>
 </div>
 {% endblock %}

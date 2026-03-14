@@ -77,6 +77,16 @@ class Response(NamedTuple):
         )
 
     @staticmethod
+    def forbidden(message: str) -> Response:
+        return Response(
+            body=message,
+            status_code=403,
+            headers={
+                "Content-Type": "text/plain; charset=utf-8",
+            },
+        )
+
+    @staticmethod
     def internal_error(message: str) -> Response:
         return Response(
             body=message,

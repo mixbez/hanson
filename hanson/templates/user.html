@@ -1,34 +1,40 @@
 {% extends "base_session.html" %}
 
-{% block title %}{{profile_user.full_name}} — Hanson{% endblock %}
+{% block title %}{{profile_user.full_name}} — Рынок Предсказаний{% endblock %}
 
 {% block body %}
 <div class="main-content">
   <h1>{{profile_user.full_name}}</h1>
-  <p>Here we will later add an overview of the markets created,
-    and possibly the market that the user has a position in.</p>
+  <p>Участник рынка предсказаний Вастрик.Клуба.</p>
 </div>
 <aside>
   <div class="aside-content">
     <table class="properties">
       <tr>
-        <th>Username</th>
+        <th>Логин</th>
         <td>{{profile_user.username}}</td>
       </tr>
       <tr>
-        <th>Joined</th>
+        <th>Зарегистрирован</th>
         <td class="num">
           <span title="{{
             profile_user.created_at.isoformat(sep=' ', timespec='seconds')
           }}">{{
-            profile_user.created_at.strftime("%Y-%m-%d")
+            profile_user.created_at.strftime("%d.%m.%Y")
           }}</span>
         </td>
       </tr>
+      {% if profile_user.is_market_admin %}
       <tr>
-        <th>Net worth</th>
-        <td class="num">3,140.00</td>
+        <th>Роль</th>
+        <td><span class="badge">market admin</span></td>
       </tr>
+      {% elif profile_user.is_club_moderator() %}
+      <tr>
+        <th>Роль</th>
+        <td><span class="badge">модератор клуба</span></td>
+      </tr>
+      {% endif %}
     </table>
   </div>
 </aside>

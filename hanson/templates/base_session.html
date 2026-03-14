@@ -2,10 +2,13 @@
 
 {% block headerbar %}
 <nav id="main-nav">
-  <a href="/" id="home-link">Hanson</a>
-  <a href="/markets">Markets</a>
-  <a href="/users">Users</a>
-  <a href="/assets">ℙ {{session_user.points_balance.amount}}</a>
+  <a href="/" id="home-link">Рынок Предсказаний</a>
+  <a href="/markets">Пари</a>
+  <a href="/users">Участники</a>
+  <a href="/assets">🪙 {{session_user.points_balance.amount | int}} жетонов</a>
+  {% if session_user.user.can_gift_tokens() %}
+  <a href="/admin">Админ</a>
+  {% endif %}
 </nav>
 <div id="session-indicator">
   <details>
@@ -14,11 +17,9 @@
       <span class="caret"></span>
     </summary>
     <nav>
-      <a href="/user/{{session_user.user.username}}">Profile</a>
-      <a href="/assets">Assets</a>
-      <a href="/transactions">Transactions</a>
-      <a href="/settings">Settings</a>
-      <a href="/logout">Log Out</a>
+      <a href="/user/{{session_user.user.username}}">Профиль</a>
+      <a href="/assets">Активы</a>
+      <a href="/logout">Выйти</a>
     </nav>
   </details>
 </div>

@@ -1,16 +1,17 @@
 {% extends "base_session.html" %}
 
-{% block title %}Checkout — {{order.market.title}} — Hanson{% endblock %}
+{% block title %}Подтверждение ставки — {{order.market.title}} — Рынок Предсказаний{% endblock %}
 
 {% block body %}
 <div class="main-content main-full">
   <h1>{{order.market.title}}</h1>
+  <h2>Подтверждение сделки</h2>
   <table class="checkout">
     <tr>
-      <th>Outcome</th>
-      <th colspan="3">Probability</th>
-      <th colspan="3">Balance</th>
-      <th>Net Change</th>
+      <th>Исход</th>
+      <th colspan="3">Вероятность</th>
+      <th colspan="3">Акции</th>
+      <th>Изменение</th>
     </tr>
     {% for outcome, p_before, p_after, balance_before, change in zip(
         order.outcomes.outcomes,
@@ -21,20 +22,20 @@
     ) %}
       <tr>
         <td>{{outcome.name}}</td>
-        <td class="num">{{"{:.3f}".format(p_before)}}</td>
+        <td class="num">{{"{:.1f}%".format(p_before * 100)}}</td>
         <td class="arrow">→</td>
-        <td class="num arrow">{{"{:.3f}".format(p_after)}}</td>
+        <td class="num arrow">{{"{:.1f}%".format(p_after * 100)}}</td>
         <td class="num">{{"{:.2f}".format(balance_before.amount)}}</td>
         <td class="arrow">→</td>
-        <td class="num arrow" >{{"{:.2f}".format(balance_before.amount + order.cost_points.amount - change)}}</td>
+        <td class="num arrow">{{"{:.2f}".format(balance_before.amount + order.cost_points.amount - change)}}</td>
         <td class="num">{{"{:.2f}".format(order.cost_points.amount - change)}}</td>
       </tr>
     {% endfor %}
     <tr>
-      <th>Points</th>
+      <th>Жетоны</th>
       <th colspan="3"></th>
       <th colspan="3"></th>
-      <th class="num">{{"{:.2f}".format(-order.cost_points.amount)}}</th>
+      <th class="num">{{"{:,.0f}".format(-order.cost_points.amount)}}</th>
     </tr>
   </table>
   <form id="order-form" action="/market/{{order.market.id}}/checkout" method="post">
@@ -46,7 +47,8 @@
     {% else %}
     <input type="hidden" name="max_spend" value="{{'{:.2f}'.format(order.max_spend.amount)}}">
     {% endif %}
-    <input type="submit" value="Confirm Order">
+    <input type="submit" value="Подтвердить ставку">
+    <a href="/market/{{order.market.id}}">Отмена</a>
   </form>
 </div>
 {% endblock %}

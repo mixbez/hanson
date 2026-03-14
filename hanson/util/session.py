@@ -1,10 +1,3 @@
-# Hanson -- Self-hosted prediction market app
-# Copyright 2022 Ruud van Asseldonk
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# A copy of the License has been included in the root of the repository.
-
 from __future__ import annotations
 
 from typing import NamedTuple
@@ -28,8 +21,8 @@ class SessionUser(NamedTuple):
 def get_session_user(tx: Transaction) -> SessionUser:
     """
     Returns the user that is currently logged in.
-    If no user is logged in, raises a NotLoggedIn exception,
-    which is handled at the application level to redirect to /login.
+    Raises NotLoggedInError if no session cookie is found, which is handled
+    at the application level to redirect to /login.
     """
     session = Session.get_from_cookie(tx)
     if session is None:

@@ -1,22 +1,18 @@
 {% extends "base.html" %}
 
-{% block title %}Log In — Hanson{% endblock %}
+{% block title %}Вход — Рынок Предсказаний{% endblock %}
 
 {% block headerbar %}
 <nav id="main-nav">
-  <a href="/" id="home-link">Hanson</a>
+  <a href="/" id="home-link">Рынок Предсказаний</a>
 </nav>
 {% endblock %}
 
 {% block body %}
 <div id="login-form">
-  <form method="post">
-    <label for="username">Username</label>
-    <input name="username" id="username" required>
-    <!-- For now there is no authentication.
-      -- Eventually, I would rather use a third-party identity provider.
-      -->
-    <input type="submit" value="Log In">
-  </form>
+  <h1>Рынок Предсказаний</h1>
+  <p>Делай ставки на будущее вместе с участниками клуба Вастрик.</p>
+  <p>Каждому участнику — <strong>10&nbsp;000 жетонов</strong> при регистрации и <strong>100 жетонов</strong> ежедневно.</p>
+  <a class="button" href="/login">Войти через Вастрик.Клуб</a>
 </div>
 {% endblock %}
