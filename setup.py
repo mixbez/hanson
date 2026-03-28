@@ -6,10 +6,13 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
+        "authlib>=1.3",
         "click",
-        "flask",
+        "flask>=3.0",
+        "httpx",
         "jinja2",
         "psycopg2",
+        "requests",
         "waitress",
     ],
     scripts=[

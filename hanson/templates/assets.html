@@ -1,18 +1,18 @@
 {% extends "base_session.html" %}
 
-{% block title %}Assets — Hanson{% endblock %}
+{% block title %}Активы — Рынок Предсказаний{% endblock %}
 
 {% block body %}
 <div class="main-content main-full">
-  <h1>Assets</h1>
+  <h1>Ваши активы</h1>
   <table class="asset-report">
     <thead>
       <tr>
-        <th>Asset</th>
-        <th class="num">Amount</th>
-        <th class="num">Market value (ℙ)</th>
-        <th class="num">Most likely value (ℙ)</th>
-        <th class="num">Max value (ℙ)</th>
+        <th>Актив</th>
+        <th class="num">Количество</th>
+        <th class="num">Рыночная стоимость 🪙</th>
+        <th class="num">Вероятная стоимость 🪙</th>
+        <th class="num">Максимальная стоимость 🪙</th>
       </tr>
     </thead>
     <tbody>
@@ -21,34 +21,34 @@
       <tr class="post-header" id="{{post.id}}">
         <td><a href="{{post.href}}">{{post.name}}</a></td>
         <td></td>
-        <td class="num highlight">{{"{:.2f}".format(post.market_value.amount)}}</td>
-        <td class="num highlight">{{"{:.2f}".format(post.most_likely_value.amount)}}</td>
-        <td class="num highlight">{{"{:.2f}".format(post.max_value.amount)}}</td>
+        <td class="num highlight">{{"{:,.0f}".format(post.market_value.amount)}}</td>
+        <td class="num highlight">{{"{:,.0f}".format(post.most_likely_value.amount)}}</td>
+        <td class="num highlight">{{"{:,.0f}".format(post.max_value.amount)}}</td>
       </tr>
       {% endif %}
       {% for entry in post.entries %}
       <tr>
         <td>{{entry.name}}</td>
         <td class="num">{{"{:.2f}".format(entry.amount_native.amount)}}</td>
-        <td class="num">{{"{:.2f}".format(entry.market_value.amount)}}</td>
+        <td class="num">{{"{:,.0f}".format(entry.market_value.amount)}}</td>
         <td class="num{%
           if not entry.most_likely_value.is_zero()
-          %}">{{"{:.2f}".format(entry.most_likely_value.amount)}}{%
+          %}">{{"{:,.0f}".format(entry.most_likely_value.amount)}}{%
           else %} zero">—{%
           endif
           %}</td>
-        <td class="num">{{"{:.2f}".format(entry.max_value.amount)}}</td>
+        <td class="num">{{"{:,.0f}".format(entry.max_value.amount)}}</td>
       </tr>
       {% endfor %}
     {% endfor %}
     </tbody>
     <tfoot>
       <tr class="post-header">
-        <th>Total</th>
+        <th>Итого</th>
         <th></th>
-        <th class="num">{{"{:.2f}".format(asset_report.market_value.amount)}}</th>
-        <th class="num">{{"{:.2f}".format(asset_report.most_likely_value.amount)}}</th>
-        <th class="num">{{"{:.2f}".format(asset_report.max_value.amount)}}</th>
+        <th class="num">{{"{:,.0f}".format(asset_report.market_value.amount)}}</th>
+        <th class="num">{{"{:,.0f}".format(asset_report.most_likely_value.amount)}}</th>
+        <th class="num">{{"{:,.0f}".format(asset_report.max_value.amount)}}</th>
       </tr>
     </tfoot>
   </table>

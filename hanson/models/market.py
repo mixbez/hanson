@@ -81,6 +81,7 @@ class Market(NamedTuple):
               markets_ext
             WHERE
               id = %s
+              AND deleted_at IS NULL
             """,
             (market_id,),
         )
@@ -95,6 +96,13 @@ class Market(NamedTuple):
         assert result[3] is not None
 
         return Market(*result)
+
+    def soft_delete(self, tx: Transaction) -> None:
+        """Soft-delete this market so it no longer appears in listings."""
+        tx.execute(
+            "UPDATE markets SET deleted_at = now() WHERE id = %s;",
+            (self.id,),
+        )
 
     @staticmethod
     def list_all_with_capitalization(
@@ -116,6 +124,8 @@ class Market(NamedTuple):
               ) as capitalization
             FROM
               markets_ext
+            WHERE
+              deleted_at IS NULL
             ORDER BY
               capitalization DESC;
             """,

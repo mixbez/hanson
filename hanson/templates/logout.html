@@ -1,11 +1,18 @@
-{% extends "base_session.html" %}
+{% extends "base.html" %}
 
-{% block title %}Log Out — Hanson{% endblock %}
+{% block title %}Выйти — Рынок Предсказаний{% endblock %}
+
+{% block headerbar %}
+<nav id="main-nav">
+  <a href="/" id="home-link">Рынок Предсказаний</a>
+</nav>
+{% endblock %}
 
 {% block body %}
 <div id="login-form">
+  <h1>Выход из системы</h1>
   <form method="post">
-    <input type="submit" value="Log Out">
+    <input type="submit" value="Выйти">
   </form>
 </div>
 {% endblock %}

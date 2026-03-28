@@ -1,0 +1,50 @@
+{% extends "base_session.html" %}
+
+{% block title %}Администрирование — Рынок Предсказаний{% endblock %}
+
+{% block body %}
+<div class="main-content main-full">
+  <h1>Панель администратора</h1>
+
+  <h2>Выдать жетоны пользователю</h2>
+  <form action="/admin/gift_tokens" method="post">
+    <label for="gift_user_id">Пользователь</label>
+    <select name="user_id" id="gift_user_id" required>
+      {% for user in users %}
+      <option value="{{user.id}}">{{user.full_name}} (@{{user.username}})</option>
+      {% endfor %}
+    </select>
+    <label for="gift_amount">Количество жетонов</label>
+    <input name="amount" id="gift_amount" type="number" min="1" step="1" required value="1000">
+    <input type="submit" value="Выдать жетоны">
+  </form>
+
+  <h2>Управление ролями market_admin</h2>
+  <table class="properties">
+    <tr>
+      <th>Участник</th>
+      <th>market_admin</th>
+      <th>Действие</th>
+    </tr>
+    {% for user in users %}
+    <tr>
+      <td><a href="/user/{{user.username}}">{{user.full_name}}</a></td>
+      <td>{% if user.is_market_admin %}✅{% else %}—{% endif %}</td>
+      <td>
+        {% if user.is_market_admin and user.id != session_user.user.id %}
+        <form action="/admin/revoke_market_admin" method="post" style="display:inline">
+          <input type="hidden" name="user_id" value="{{user.id}}">
+          <input type="submit" value="Отозвать">
+        </form>
+        {% elif not user.is_market_admin %}
+        <form action="/admin/grant_market_admin" method="post" style="display:inline">
+          <input type="hidden" name="user_id" value="{{user.id}}">
+          <input type="submit" value="Назначить">
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

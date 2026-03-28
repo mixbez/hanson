@@ -1,17 +1,23 @@
 {% extends "base_session.html" %}
 
-{% block title %}Markets — Hanson{% endblock %}
+{% block title %}Пари — Рынок Предсказаний{% endblock %}
 
 {% block body %}
 <div class="main-content main-full">
-  <h1>Markets</h1>
+  <h1>Открытые пари</h1>
   <ul class="market-list">
   {% for market, cap in markets_with_caps %}
-    <li><span class="num">{{cap.amount}}</span>&emsp;<a href="/market/{{market.id}}">{{market.title}}</a></li>
+    <li>
+      <span class="num">🪙 {{cap.amount | int}}</span>&emsp;
+      <a href="/market/{{market.id}}">{{market.title}}</a>
+      {% if market.resolution_id %}<span class="badge">завершено</span>{% endif %}
+    </li>
+  {% else %}
+    <li>Пари пока нет. Создайте первое!</li>
   {% endfor %}
   </ul>
   <p>
-    <a href="/market/new">Create a new market</a>
+    <a href="/market/new">Создать новое пари →</a>
   </p>
 </div>
 {% endblock %}

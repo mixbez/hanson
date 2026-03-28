@@ -78,18 +78,11 @@ def route_post_market_new(tx: Transaction) -> Response:
     title = title.replace("\r", "").strip()
     description = description.replace("\r", "").strip()
 
-    outcome_descriptions: List[Tuple[str, Color]] = []
-    for i in range(0, 5):
-        label: Optional[str] = request.form.get(f"label{i}")
-        color_hex = request.form.get(f"color{i}")
-        if label is not None and len(label) > 0:
-            try:
-                assert color_hex is not None
-                color = Color.from_html_hex(color_hex)
-            except:
-                return Response.bad_request("Invalid or missing 'color'.")
-            label = label.strip()
-            outcome_descriptions.append((label, color))
+    # Binary markets only: fixed «Да» / «Нет» outcomes
+    outcome_descriptions: List[Tuple[str, Color]] = [
+        ("Да", Color.from_html_hex("#22c55e")),
+        ("Нет", Color.from_html_hex("#ef4444")),
+    ]
 
     market = Market.create(
         tx,
@@ -552,4 +545,49 @@ def route_post_market_checkout(tx: Transaction, market_id: int) -> Response:
     tx.commit()
 
     # TODO: Include some kind of "your purchase was successful screen.
+    return Response.redirect_see_other(f"/market/{market_id}")
+
+
+# ── Admin: delete market ───────────────────────────────────────────────────────
+
+@app.post("/market/<int:market_id>/delete")
+@with_tx
+def route_post_market_delete(tx: Transaction, market_id: int) -> Response:
+    session_user = get_session_user(tx)
+
+    if not session_user.user.can_delete_market():
+        return Response.forbidden("Недостаточно прав для удаления пари.")
+
+    market = Market.get_by_id(tx, market_id)
+    if market is None:
+        return Response.not_found("Пари не найдено.")
+
+    market.soft_delete(tx)
+    tx.commit()
+
+    return Response.redirect_see_other("/markets")
+
+
+# ── Admin: resolve market ─────────────────────────────────────────────────────
+
+@app.post("/market/<int:market_id>/resolve")
+@with_tx
+def route_post_market_resolve(tx: Transaction, market_id: int) -> Response:
+    session_user = get_session_user(tx)
+
+    if not session_user.user.can_resolve_market():
+        return Response.forbidden("Недостаточно прав для завершения пари.")
+
+    market = Market.get_by_id(tx, market_id)
+    if market is None:
+        return Response.not_found("Пари не найдено.")
+
+    outcome_id_str = request.form.get("outcome_id")
+    if not outcome_id_str or not outcome_id_str.isdigit():
+        return Response.bad_request("Необходимо указать исход (outcome_id).")
+
+    outcome_id = int(outcome_id_str)
+    market.resolve(tx, resolver_user_id=session_user.user.id)
+    tx.commit()
+
     return Response.redirect_see_other(f"/market/{market_id}")
