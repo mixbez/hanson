@@ -16,7 +16,5 @@
       "dest": "app.py"
     }
   ],
-  "env": {
-    "HANSON_CONFIG": "config.toml"
-  }
+  "env": {}
 }
